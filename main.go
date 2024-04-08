@@ -3,10 +3,13 @@ package main
 import (
 	"fmt"
 	"os"
+
+	qrCode "github.com/skip2/go-qrcode"
 )
 
 const (
-	MAX_SIZE = 1024
+	MAX_SIZE          = 1024
+	QR_CODED_PNG_SIZE = 256
 )
 
 func checkError(e error) {
@@ -27,7 +30,13 @@ func readFile(path string) string {
 	return string(data[:count])
 }
 
+func createQrCode(data string, destination string) {
+	err := qrCode.WriteFile(data, qrCode.Medium, QR_CODED_PNG_SIZE, destination)
+	checkError(err)
+}
+
 func main() {
 	data := readFile("input.txt")
-	fmt.Println(data)
+	createQrCode(data, "output.png")
+	fmt.Println("QR Code created successfully!")
 }
